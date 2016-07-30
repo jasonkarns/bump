@@ -52,7 +52,8 @@ module Bump
       private
 
       def bump(file, current, next_version, options)
-        replace(file, current, next_version)
+        current_info.version = next_version
+
         if options[:bundle] and under_version_control?("Gemfile.lock")
           bundler_with_clean_env do
             system("bundle")
@@ -88,11 +89,6 @@ module Bump
         system("git add --update Gemfile.lock") if options[:bundle]
         system("git add --update #{file} && git commit -m '#{commit_message(version, options)}'")
         system("git tag -a -m 'Bump to v#{version}' v#{version}") if options[:tag]
-      end
-
-      def replace(file, old, new)
-        content = File.read(file)
-        File.open(file, "w"){|f| f.write(content.sub(old, new)) }
       end
 
       def current_info

@@ -22,6 +22,14 @@ module Bump
       self.class.version_from(path)
     end
 
+    def version=(new_version)
+      old_version = version
+      content = File.read(path)
+      File.open(path, "w") do |file|
+        file.write(content.sub(old_version, new_version))
+      end
+    end
+
     private
 
     def paths
