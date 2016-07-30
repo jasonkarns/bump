@@ -17,8 +17,7 @@ module Bump
     end
 
     def version
-      File.read(path.to_s)[VERSION_REGEX]
-    rescue Errno::ENOENT
+      self.class.version_from(path)
     end
 
     private
