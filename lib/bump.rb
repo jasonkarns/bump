@@ -51,7 +51,9 @@ module Bump
 
       private
 
-      def bump(file, current, next_version, options)
+      def bump_to(next_version, options)
+        current_version = current_info.version
+
         current_info.version = next_version
 
         if options[:bundle] and under_version_control?("Gemfile.lock")
@@ -59,8 +61,8 @@ module Bump
             system("bundle")
           end
         end
-        commit(next_version, file, options) if options[:commit]
-        ["Bump version #{current} to #{next_version}", 0]
+        commit(next_version, current_info.path, options) if options[:commit]
+        ["Bump version #{current_version} to #{next_version}", 0]
       end
 
       def bundler_with_clean_env(&block)
@@ -73,11 +75,11 @@ module Bump
 
       def bump_part(part, options)
         next_version = next_version(current_info.version, part)
-        bump(current_info.path, current, next_version, options)
+        bump_to(next_version, options)
       end
 
       def bump_set(next_version, options)
-        bump(current_info.path, current, next_version, options)
+        bump_to(next_version, options)
       end
 
       def commit_message(version, options)
