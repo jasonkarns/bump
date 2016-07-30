@@ -139,9 +139,8 @@ module Bump
       end
 
       def version_from_chef
-        file = find_version_file("metadata.rb")
-        return unless file && File.read(file) =~ /^version\s+(['"])(#{VERSION_REGEX})['"]/
-        [$2, file]
+        vf = Chef.new
+        [ vf.version, vf.path ] if vf.version
       end
 
       def extract_version_from_file(file)

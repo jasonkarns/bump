@@ -64,4 +64,12 @@ module Bump
       end
     end
   end
+
+  class Chef < VFile
+    GLOB="metadata.rb"
+
+    def version
+      self.class.version_from(path, /^version\s+['"](#{VERSION_REGEX})['"]/)
+    end
+  end
 end
