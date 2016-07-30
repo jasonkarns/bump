@@ -126,12 +126,8 @@ module Bump
       end
 
       def version_from_version_rb
-        files = Dir.glob("lib/**/version.rb")
-        files.detect do |file|
-          if version_and_file = extract_version_from_file(file)
-            return version_and_file
-          end
-        end
+        vf = VersionRb.new
+        [ vf.version, vf.path ] if vf.version
       end
 
       def version_from_version
