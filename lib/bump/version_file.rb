@@ -32,7 +32,7 @@ module Bump
     GLOB="VERSION"
   end
 
-  class VersionRb < VFile
+  class VersionRbFile < VFile
     GLOB="lib/**/version.rb"
 
     private
@@ -44,7 +44,7 @@ module Bump
     end
   end
 
-  class Gemspec < VFile
+  class GemspecFile < VFile
     GLOB="*.gemspec"
 
     def version
@@ -53,7 +53,7 @@ module Bump
     end
   end
 
-  class LibRb < VFile
+  class LibRbFile < VFile
     GLOB="lib/**/*.rb"
 
     private
@@ -65,7 +65,7 @@ module Bump
     end
   end
 
-  class Chef < VFile
+  class ChefFile < VFile
     GLOB="metadata.rb"
 
     def version

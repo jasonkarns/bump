@@ -119,12 +119,12 @@ module Bump
       end
 
       def version_from_gemspec
-        vf = Gemspec.new
+        vf = GemspecFile.new
         [ vf.version, vf.path ] if vf.version
       end
 
       def version_from_version_rb
-        vf = VersionRb.new
+        vf = VersionRbFile.new
         [ vf.version, vf.path ] if vf.version
       end
 
@@ -134,28 +134,13 @@ module Bump
       end
 
       def version_from_lib_rb
-        vf = LibRb.new
+        vf = LibRbFile.new
         [ vf.version, vf.path ] if vf.version
       end
 
       def version_from_chef
-        vf = Chef.new
+        vf = ChefFile.new
         [ vf.version, vf.path ] if vf.version
-      end
-
-      def extract_version_from_file(file)
-        return unless version = File.read(file)[VERSION_REGEX]
-        [version, file]
-      end
-
-      def find_version_file(pattern)
-        files = Dir.glob(pattern)
-        case files.size
-        when 0 then nil
-        when 1 then files.first
-        else
-          raise TooManyVersionFilesError, files.join(", ")
-        end
       end
 
       def next_version(current, part)
