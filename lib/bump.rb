@@ -1,3 +1,5 @@
+require 'bump/version_file'
+
 module Bump
   class InvalidOptionError < StandardError; end
   class InvalidVersionError < StandardError; end
@@ -133,8 +135,8 @@ module Bump
       end
 
       def version_from_version
-        return unless file = find_version_file("VERSION")
-        extract_version_from_file(file)
+        vf = VersionFile.new
+        [ vf.version, vf.path ] if vf.version
       end
 
       def version_from_lib_rb
