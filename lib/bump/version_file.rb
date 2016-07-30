@@ -1,3 +1,5 @@
+require 'bump/errors'
+
 module Bump
   class VFile
     include Enumerable

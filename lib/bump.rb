@@ -1,11 +1,7 @@
+require 'bump/errors'
 require 'bump/version_file'
 
 module Bump
-  class InvalidOptionError < StandardError; end
-  class InvalidVersionError < StandardError; end
-  class UnfoundVersionError < StandardError; end
-  class TooManyVersionFilesError < StandardError; end
-
   class <<self
     attr_accessor :tag_by_default
   end
@@ -14,7 +10,6 @@ module Bump
     BUMPS         = %w(major minor patch pre)
     PRERELEASE    = ["alpha","beta","rc",nil]
     OPTIONS       = BUMPS | ["set", "current"]
-    VERSION_REGEX = /(\d+\.\d+\.\d+(?:-(?:#{PRERELEASE.compact.join('|')}))?)/
 
     class << self
 
