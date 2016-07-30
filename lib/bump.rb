@@ -51,7 +51,7 @@ module Bump
       end
 
       def current
-        current_info.first
+        current_info.version
       end
 
       private
@@ -76,14 +76,12 @@ module Bump
       end
 
       def bump_part(part, options)
-        current, file = current_info
-        next_version = next_version(current, part)
-        bump(file, current, next_version, options)
+        next_version = next_version(current_info.version, part)
+        bump(current_info.path, current, next_version, options)
       end
 
       def bump_set(next_version, options)
-        current, file = current_info
-        bump(file, current, next_version, options)
+        bump(current_info.path, current, next_version, options)
       end
 
       def commit_message(version, options)
@@ -103,9 +101,8 @@ module Bump
       end
 
       def current_info
-        vf = [VersionFile, VersionRbFile, GemspecFile, LibRbFile, ChefFile]
+        @vf ||= [VersionFile, VersionRbFile, GemspecFile, LibRbFile, ChefFile]
           .map(&:new).find(&:version) || raise(UnfoundVersionError)
-        [ vf.version, vf.path ]
       end
 
       def next_version(current, part)
