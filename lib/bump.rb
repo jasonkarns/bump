@@ -5,7 +5,6 @@ module Bump
   class InvalidVersionError < StandardError; end
   class UnfoundVersionError < StandardError; end
   class TooManyVersionFilesError < StandardError; end
-  class UnfoundVersionFileError < StandardError; end
 
   class <<self
     attr_accessor :tag_by_default
@@ -47,8 +46,6 @@ module Bump
         ["Invalid version number given.", 1]
       rescue UnfoundVersionError
         ["Unable to find your gem version", 1]
-      rescue UnfoundVersionFileError
-        ["Unable to find a file with the gem version", 1]
       rescue TooManyVersionFilesError
         ["More than one version file found (#{$!.message})", 1]
       end
@@ -106,16 +103,9 @@ module Bump
       end
 
       def current_info
-        version, file = (
-          version_from_version ||
-          version_from_version_rb ||
-          version_from_gemspec ||
-          version_from_lib_rb  ||
-          version_from_chef  ||
-          raise(UnfoundVersionFileError)
-        )
-        raise UnfoundVersionError unless version
-        [version, file]
+        vf = [VersionFile, VersionRbFile, GemspecFile, LibRbFile, ChefFile]
+          .map(&:new).find(&:version) || raise(UnfoundVersionError)
+        [ vf.version, vf.path ]
       end
 
       def version_from_gemspec

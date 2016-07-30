@@ -27,7 +27,7 @@ describe Bump do
 
   it "should fail if version is weird" do
     write_gemspec('"1."+"3.4"')
-    bump("current", :fail => true).should include "Unable to find a file with the gem version"
+    bump("current", :fail => true).should include "Unable to find"
   end
 
   it "should show help" do
