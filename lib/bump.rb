@@ -46,22 +46,22 @@ module Bump
       end
 
       def current
-        current_info.version
+        version_file.version
       end
 
       private
 
       def bump_to(next_version, options)
-        current_version = current_info.version
+        current_version = version_file.version
 
-        current_info.version = next_version
+        version_file.version = next_version
 
         if options[:bundle] and under_version_control?("Gemfile.lock")
           bundler_with_clean_env do
             system("bundle")
           end
         end
-        commit(next_version, current_info.path, options) if options[:commit]
+        commit(next_version, version_file.path, options) if options[:commit]
         ["Bump version #{current_version} to #{next_version}", 0]
       end
 
@@ -74,7 +74,7 @@ module Bump
       end
 
       def bump_part(part, options)
-        next_version = next_version(current_info.version, part)
+        next_version = next_version(version_file.version, part)
         bump_to(next_version, options)
       end
 
@@ -93,7 +93,7 @@ module Bump
         system("git tag -a -m 'Bump to v#{version}' v#{version}") if options[:tag]
       end
 
-      def current_info
+      def version_file
         @vf ||= [VersionFile, VersionRbFile, GemspecFile, LibRbFile, ChefFile]
           .map(&:new).find(&:version) || raise(UnfoundVersionError)
       end
