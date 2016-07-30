@@ -108,31 +108,6 @@ module Bump
         [ vf.version, vf.path ]
       end
 
-      def version_from_gemspec
-        vf = GemspecFile.new
-        [ vf.version, vf.path ] if vf.version
-      end
-
-      def version_from_version_rb
-        vf = VersionRbFile.new
-        [ vf.version, vf.path ] if vf.version
-      end
-
-      def version_from_version
-        vf = VersionFile.new
-        [ vf.version, vf.path ] if vf.version
-      end
-
-      def version_from_lib_rb
-        vf = LibRbFile.new
-        [ vf.version, vf.path ] if vf.version
-      end
-
-      def version_from_chef
-        vf = ChefFile.new
-        [ vf.version, vf.path ] if vf.version
-      end
-
       def next_version(current, part)
         current, prerelease = current.split('-')
         major, minor, patch, *other = current.split('.')
