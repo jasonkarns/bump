@@ -119,10 +119,8 @@ module Bump
       end
 
       def version_from_gemspec
-        return unless file    = find_version_file("*.gemspec")
-        version               = File.read(file)[/\.version\s*=\s*["']#{VERSION_REGEX}["']/, 1]
-        return unless version = File.read(file)[/Gem::Specification.new.+ ["']#{VERSION_REGEX}["']/, 1] if version.nil?
-        [version, file]
+        vf = Gemspec.new
+        [ vf.version, vf.path ] if vf.version
       end
 
       def version_from_version_rb

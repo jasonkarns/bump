@@ -5,8 +5,8 @@ module Bump
     PRERELEASE    = ["alpha","beta","rc",nil]
     VERSION_REGEX = /(\d+\.\d+\.\d+(?:-(?:#{PRERELEASE.compact.join('|')}))?)/
 
-    def self.version_from(file)
-      File.read(file.to_s)[VERSION_REGEX]
+    def self.version_from(file, regex=VERSION_REGEX)
+      File.read(file.to_s)[regex, 1]
     rescue Errno::ENOENT
     end
 
@@ -41,6 +41,15 @@ module Bump
       super.select do |file|
         self.class.version_from(file)
       end
+    end
+  end
+
+  class Gemspec < VFile
+    GLOB="*.gemspec"
+
+    def version
+      self.class.version_from(path, /\.version\s*=\s*["']#{VERSION_REGEX}["']/) ||
+        self.class.version_from(path, /Gem::Specification.new.+ ["']#{VERSION_REGEX}["']/)
     end
   end
 end
