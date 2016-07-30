@@ -52,4 +52,16 @@ module Bump
         self.class.version_from(path, /Gem::Specification.new.+ ["']#{VERSION_REGEX}["']/)
     end
   end
+
+  class LibRb < VFile
+    GLOB="lib/**/*.rb"
+
+    private
+
+    def paths
+      super.select do |file|
+        self.class.version_from(file, /^\s+VERSION = ['"](#{VERSION_REGEX})['"]/i)
+      end
+    end
+  end
 end

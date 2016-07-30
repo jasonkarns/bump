@@ -134,11 +134,8 @@ module Bump
       end
 
       def version_from_lib_rb
-        files = Dir.glob("lib/**/*.rb")
-        file = files.detect do |file|
-          File.read(file) =~ /^\s+VERSION = ['"](#{VERSION_REGEX})['"]/i
-        end
-        [$1, file] if file
+        vf = LibRb.new
+        [ vf.version, vf.path ] if vf.version
       end
 
       def version_from_chef
