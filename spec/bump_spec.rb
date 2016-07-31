@@ -358,7 +358,7 @@ describe Bump do
   context ".current" do
     it "returns the version" do
       write_gemspec
-      Bump::Bump.current.to_s.should == "4.2.3"
+      Bump::Bump.new.current.to_s.should == "4.2.3"
     end
   end
 
@@ -443,10 +443,10 @@ describe Bump do
 
   context 'verify private class mothods' do
     it 'raise exception when called' do
-      lambda { Bump::Bump.bump('foo','1.2.3','1.2.4',{}) }.should raise_error NoMethodError
+      lambda { Bump::Bump.new.bump('foo','1.2.3','1.2.4',{}) }.should raise_error NoMethodError
     end
     it 'has private methods' do
-      Bump::Bump.private_methods(false).size.should > Object.private_methods(false).size
+      Bump::Bump.new.private_methods(false).size.should > Object.private_methods(false).size
     end
   end
 

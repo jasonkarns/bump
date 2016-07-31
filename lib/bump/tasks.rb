@@ -9,12 +9,12 @@ namespace :bump do
     end
 
     task bump, :tag do |_task, args|
-      Bump::Bump.run(bump, args)
+      Bump::Bump.new(args).run(bump)
     end
   end
 
   desc "Sets the version number using the VERSION environment variable"
   task :set do
-    Bump::Bump.run("set", :version => ENV['VERSION'])
+    Bump::Bump.new(:version => ENV['VERSION']).run("set")
   end
 end

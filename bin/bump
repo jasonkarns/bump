@@ -33,4 +33,4 @@ if ARGV.first == "set"
 end
 
 require File.dirname(__FILE__) + '/../lib/bump'
-Bump::Bump.run(ARGV.first, options)
+Bump::Bump.new(options).run(ARGV.first)
