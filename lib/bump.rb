@@ -31,7 +31,7 @@ module Bump
           raise InvalidVersionError unless options[:version]
           bump_set(options[:version], options)
         when "current"
-          ["Current version: #{current}", 0]
+          puts "Current version: #{current}"
         else
           raise InvalidOptionError, OPTIONS
         end
@@ -56,14 +56,12 @@ module Bump
       end
 
       def bump_to(new_version, options)
-        msg = "Bump version #{current} to #{new_version}"
+        puts "Bump version #{current} to #{new_version}"
 
         version_file.version = new_version
 
         bundler_with_clean_env { system("bundle") } if options[:bundle]
         commit(new_version, options) if options[:commit]
-
-        [msg, 0]
       end
 
       def bundler_with_clean_env(&block)
