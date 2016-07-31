@@ -33,16 +33,8 @@ module Bump
         when "current"
           ["Current version: #{current}", 0]
         else
-          raise InvalidOptionError
+          raise InvalidOptionError, OPTIONS
         end
-      rescue InvalidOptionError
-        ["Invalid option. Choose between #{OPTIONS.join(',')}.", 1]
-      rescue InvalidVersionError
-        ["Invalid version number given.", 1]
-      rescue UnfoundVersionError
-        ["Unable to find your gem version", 1]
-      rescue TooManyVersionFilesError
-        ["More than one version file found (#{$!.message})", 1]
       end
 
       def current

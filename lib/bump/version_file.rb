@@ -15,7 +15,7 @@ module Bump
 
     def path
       @path ||= paths.tap do |files|
-        raise TooManyVersionFilesError, files.join(", ") if files.size > 1
+        raise TooManyVersionFilesError, files if files.size > 1
       end.first
     end
 
