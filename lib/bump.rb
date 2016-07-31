@@ -55,28 +55,6 @@ module Bump
 
       private
 
-      def bump_to(new_version, options)
-        msg = "Bump version #{current} to #{new_version}"
-
-        version_file.version = new_version
-
-        if options[:bundle] and under_version_control?("Gemfile.lock")
-          bundler_with_clean_env do
-            system("bundle")
-          end
-        end
-        commit(new_version, version_file.path, options) if options[:commit]
-        [msg, 0]
-      end
-
-      def bundler_with_clean_env(&block)
-        if defined?(Bundler)
-          Bundler.with_clean_env(&block)
-        else
-          yield
-        end
-      end
-
       def bump_part(part, options)
         bump_to(self.next(part), options)
       end
@@ -85,25 +63,45 @@ module Bump
         bump_to(next_version, options)
       end
 
-      def commit_message(version, options)
-        (options[:commit_message]) ? "v#{version} #{options[:commit_message]}" : "v#{version}"
+      def bump_to(new_version, options)
+        msg = "Bump version #{current} to #{new_version}"
+
+        version_file.version = new_version
+
+        bundler_with_clean_env { system("bundle") } if options[:bundle]
+        commit(new_version, options) if options[:commit]
+
+        [msg, 0]
       end
 
-      def commit(version, file, options)
+      def bundler_with_clean_env(&block)
+        return unless under_version_control?("Gemfile.lock")
+        if defined?(Bundler)
+          Bundler.with_clean_env(&block)
+        else
+          yield
+        end
+      end
+
+      def commit(version, options)
         return unless File.directory?(".git")
         system("git add --update Gemfile.lock") if options[:bundle]
-        system("git add --update #{file} && git commit -m '#{commit_message(version, options)}'")
+        system("git add --update #{version_file.path} && git commit -m '#{commit_message(version, options)}'")
         system("git tag -a -m 'Bump to v#{version}' v#{version}") if options[:tag]
       end
 
-      def version_file
-        @vf ||= [VersionFile, VersionRbFile, GemspecFile, LibRbFile, ChefFile]
-          .map(&:new).find(&:version) || raise(UnfoundVersionError)
+      def commit_message(version, options)
+        (options[:commit_message]) ? "v#{version} #{options[:commit_message]}" : "v#{version}"
       end
 
       def under_version_control?(file)
         @all_files ||= `git ls-files`.split(/\r?\n/)
         @all_files.include?(file)
+      end
+
+      def version_file
+        @vf ||= [VersionFile, VersionRbFile, GemspecFile, LibRbFile, ChefFile]
+          .map(&:new).find(&:version) || raise(UnfoundVersionError)
       end
     end
   end
