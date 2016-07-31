@@ -29,9 +29,13 @@ unless (ARGV.size == 1 && ARGV.first != "set") || (ARGV.size == 2 && ARGV.first 
 end
 
 require File.dirname(__FILE__) + '/../lib/bump'
+bump = Bump::Bump.new(options)
 
-if ARGV.first == "set"
-  Bump::Bump.new(options).set(ARGV[1])
+case ARGV.first
+when "set"
+  bump.set(ARGV[1])
+when "current"
+  bump.print_current
 else
-  Bump::Bump.new(options).run(ARGV.first)
+  bump.run(ARGV.first)
 end

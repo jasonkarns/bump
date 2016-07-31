@@ -27,8 +27,6 @@ module Bump
       case bump
       when *BUMPS
         bump_part(bump)
-      when "current"
-        puts "Current version: #{current}"
       else
         raise InvalidOptionError, OPTIONS
       end
@@ -40,6 +38,10 @@ module Bump
 
     def next(part)
       version_file.version.next part
+    end
+
+    def print_current
+      puts "Current version: #{current}"
     end
 
     def set(new_version)
