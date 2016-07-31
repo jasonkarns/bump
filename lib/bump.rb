@@ -2,13 +2,13 @@ require 'bump/errors'
 require 'bump/version_file'
 
 module Bump
+  BUMPS = %w(major minor patch pre)
+
   class << self
     attr_accessor :tag_by_default
   end
 
   class Bump
-    BUMPS      = %w(major minor patch pre)
-
     def self.defaults
       {
         :commit => true,

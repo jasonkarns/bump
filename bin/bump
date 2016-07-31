@@ -37,9 +37,9 @@ BANNER
     bump.set(ARGV[1])
   when "current"
     bump.print_current
-  when *Bump::BUMPS
+  when *BUMPS
     bump.bump(ARGV.first)
   else
-    raise InvalidOptionError, Bump::BUMPS | ["set", "current"]
+    raise InvalidOptionError, BUMPS | ["set", "current"]
   end
 end
