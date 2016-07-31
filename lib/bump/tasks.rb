@@ -2,13 +2,13 @@ require "bump"
 
 namespace :bump do
   (Bump::BUMPS).each do |bump|
-    desc "Bump #{bump} part of gem version"
+    desc "Bump version to #{Bump::Bump.new.next(bump)}"
     task bump, :tag do |_task, args|
       Bump::Bump.new(args).bump(bump)
     end
   end
 
-  desc "Show current gem version"
+  desc "Show current gem version: #{Bump::Bump.new.current}"
   task :current, :tag do |_task, args|
     Bump::Bump.new(args).print_current
   end
