@@ -2,14 +2,14 @@ require 'bump/errors'
 require 'bump/version_file'
 
 module Bump
-  class <<self
+  class << self
     attr_accessor :tag_by_default
   end
 
   class Bump
-    BUMPS         = %w(major minor patch pre)
-    PRERELEASE    = ["alpha","beta","rc",nil]
-    OPTIONS       = BUMPS | ["set", "current"]
+    BUMPS      = %w(major minor patch pre)
+    PRERELEASE = ["alpha","beta","rc",nil]
+    OPTIONS    = BUMPS | ["set", "current"]
 
     class << self
 
