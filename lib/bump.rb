@@ -99,23 +99,7 @@ module Bump
       end
 
       def next_version(current, part)
-        current, prerelease = current.split('-')
-        major, minor, patch, *other = current.split('.')
-        case part
-        when "major"
-          major, minor, patch, prerelease = major.succ, 0, 0, nil
-        when "minor"
-          minor, patch, prerelease = minor.succ, 0, nil
-        when "patch"
-          patch = patch.succ
-        when "pre"
-          prerelease.strip! if prerelease.respond_to? :strip
-          prerelease = PRERELEASE[PRERELEASE.index(prerelease).succ % PRERELEASE.length]
-        else
-          raise "unknown part #{part.inspect}"
-        end
-        version = [major, minor, patch, *other].compact.join('.')
-        [version, prerelease].compact.join('-')
+        current.next part
       end
 
       def under_version_control?(file)

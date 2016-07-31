@@ -356,9 +356,9 @@ describe Bump do
   end
 
   context ".current" do
-    it "returns the version as a string" do
+    it "returns the version" do
       write_gemspec
-      Bump::Bump.current.should == "4.2.3"
+      Bump::Bump.current.to_s.should == "4.2.3"
     end
   end
 

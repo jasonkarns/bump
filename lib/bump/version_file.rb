@@ -1,4 +1,5 @@
 require 'bump/errors'
+require 'bump/version'
 
 module Bump
   class VFile
@@ -8,7 +9,7 @@ module Bump
     VERSION_REGEX = /(\d+\.\d+\.\d+(?:-(?:#{PRERELEASE.compact.join('|')}))?)/
 
     def self.version_from(file, regex=VERSION_REGEX)
-      File.read(file.to_s)[regex, 1]
+      Version.parse File.read(file.to_s)[regex, 1]
     rescue Errno::ENOENT
     end
 
@@ -26,7 +27,7 @@ module Bump
       old_version = version
       content = File.read(path)
       File.open(path, "w") do |file|
-        file.write(content.sub(old_version, new_version))
+        file.write(content.sub(old_version.to_s, new_version.to_s))
       end
     end
 
