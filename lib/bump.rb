@@ -74,8 +74,7 @@ module Bump
       end
 
       def bump_part(part, options)
-        next_version = next_version(version_file.version, part)
-        bump_to(next_version, options)
+        bump_to(version_file.version.next(part), options)
       end
 
       def bump_set(next_version, options)
@@ -96,10 +95,6 @@ module Bump
       def version_file
         @vf ||= [VersionFile, VersionRbFile, GemspecFile, LibRbFile, ChefFile]
           .map(&:new).find(&:version) || raise(UnfoundVersionError)
-      end
-
-      def next_version(current, part)
-        current.next part
       end
 
       def under_version_control?(file)
