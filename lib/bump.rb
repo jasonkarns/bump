@@ -27,9 +27,6 @@ module Bump
       case bump
       when *BUMPS
         bump_part(bump)
-      when "set"
-        raise InvalidVersionError unless @options[:version]
-        bump_set(@options[:version])
       when "current"
         puts "Current version: #{current}"
       else
@@ -45,23 +42,19 @@ module Bump
       version_file.version.next part
     end
 
-    private
-
-    def bump_part(part)
-      bump_to(self.next(part))
-    end
-
-    def bump_set(next_version)
-      bump_to(next_version)
-    end
-
-    def bump_to(new_version)
+    def set(new_version)
       puts "Bump version #{current} to #{new_version}"
 
       version_file.version = new_version
 
       bundler_with_clean_env { system("bundle") } if @options[:bundle]
       commit(new_version) if @options[:commit]
+    end
+
+    private
+
+    def bump_part(part)
+      set(self.next(part))
     end
 
     def bundler_with_clean_env(&block)

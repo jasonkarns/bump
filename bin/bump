@@ -28,9 +28,10 @@ unless (ARGV.size == 1 && ARGV.first != "set") || (ARGV.size == 2 && ARGV.first 
   exit 1
 end
 
-if ARGV.first == "set"
-  options[:version] = ARGV[1]
-end
-
 require File.dirname(__FILE__) + '/../lib/bump'
-Bump::Bump.new(options).run(ARGV.first)
+
+if ARGV.first == "set"
+  Bump::Bump.new(options).set(ARGV[1])
+else
+  Bump::Bump.new(options).run(ARGV.first)
+end

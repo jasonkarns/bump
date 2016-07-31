@@ -15,6 +15,6 @@ namespace :bump do
 
   desc "Sets the version number using the VERSION environment variable"
   task :set do
-    Bump::Bump.new(:version => ENV['VERSION']).run("set")
+    Bump::Bump.new.set(ENV['VERSION'])
   end
 end
