@@ -8,8 +8,6 @@ module Bump
 
   class Bump
     BUMPS      = %w(major minor patch pre)
-    PRERELEASE = ["alpha","beta","rc",nil]
-    OPTIONS    = BUMPS | ["set", "current"]
 
     def self.defaults
       {
@@ -21,15 +19,6 @@ module Bump
 
     def initialize(opts={})
       @options = self.class.defaults.merge(opts)
-    end
-
-    def run(bump)
-      case bump
-      when *BUMPS
-        bump_part(bump)
-      else
-        raise InvalidOptionError, OPTIONS
-      end
     end
 
     def current
@@ -44,6 +33,10 @@ module Bump
       puts "Current version: #{current}"
     end
 
+    def bump(part)
+      set(self.next(part))
+    end
+
     def set(new_version)
       puts "Bump version #{current} to #{new_version}"
 
@@ -54,10 +47,6 @@ module Bump
     end
 
     private
-
-    def bump_part(part)
-      set(self.next(part))
-    end
 
     def bundler_with_clean_env(&block)
       return unless under_version_control?("Gemfile.lock")

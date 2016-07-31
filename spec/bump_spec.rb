@@ -441,15 +441,6 @@ describe Bump do
     end
   end
 
-  context 'verify private class mothods' do
-    it 'raise exception when called' do
-      lambda { Bump::Bump.new.bump('foo','1.2.3','1.2.4',{}) }.should raise_error NoMethodError
-    end
-    it 'has private methods' do
-      Bump::Bump.new.private_methods(false).size.should > Object.private_methods(false).size
-    end
-  end
-
   private
 
   def bump(command="", options={})

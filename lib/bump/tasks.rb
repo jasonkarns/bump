@@ -4,7 +4,7 @@ namespace :bump do
   (Bump::Bump::BUMPS).each do |bump|
     desc "Bump #{bump} part of gem version"
     task bump, :tag do |_task, args|
-      Bump::Bump.new(args).run(bump)
+      Bump::Bump.new(args).bump(bump)
     end
   end
 

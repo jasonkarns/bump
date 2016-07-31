@@ -1,9 +1,10 @@
 #!/usr/bin/env ruby
-require 'optparse'
+module Bump
+  require 'optparse'
 
-options = {}
-OptionParser.new do |opts|
-  opts.banner = <<BANNER
+  options = {}
+  OptionParser.new do |opts|
+    opts.banner = <<BANNER
 Bump your gem version.
 
 Usage:
@@ -16,26 +17,29 @@ Usage:
 
 Options:
 BANNER
-  opts.on("--no-commit", "Do not make a commit.") { options[:commit] = false }
-  opts.on("-m", "--commit-message [MSG]", "Append MSG to the commit message.") {|msg| options[:commit_message] = msg }
-  opts.on("--no-bundle", "Do not bundle.") { options[:bundle] = false }
-  opts.on("--tag", "Create git tag from version (only if commit is true).") { options[:tag] = true }
-  opts.on("-h", "--help", "Show this.") { puts opts; exit }
-end.parse!
+    opts.on("--no-commit", "Do not make a commit.") { options[:commit] = false }
+    opts.on("-m", "--commit-message [MSG]", "Append MSG to the commit message.") {|msg| options[:commit_message] = msg }
+    opts.on("--no-bundle", "Do not bundle.") { options[:bundle] = false }
+    opts.on("--tag", "Create git tag from version (only if commit is true).") { options[:tag] = true }
+    opts.on("-h", "--help", "Show this.") { puts opts; exit }
+  end.parse!
 
-unless (ARGV.size == 1 && ARGV.first != "set") || (ARGV.size == 2 && ARGV.first == "set")
-  puts "Usage instructions: bump --help"
-  exit 1
-end
+  unless (ARGV.size == 1 && ARGV.first != "set") || (ARGV.size == 2 && ARGV.first == "set")
+    puts "Usage instructions: bump --help"
+    exit 1
+  end
 
-require File.dirname(__FILE__) + '/../lib/bump'
-bump = Bump::Bump.new(options)
+  require File.dirname(__FILE__) + '/../lib/bump'
+  bump = Bump.new(options)
 
-case ARGV.first
-when "set"
-  bump.set(ARGV[1])
-when "current"
-  bump.print_current
-else
-  bump.run(ARGV.first)
+  case ARGV.first
+  when "set"
+    bump.set(ARGV[1])
+  when "current"
+    bump.print_current
+  when *Bump::BUMPS
+    bump.bump(ARGV.first)
+  else
+    raise InvalidOptionError, Bump::BUMPS | ["set", "current"]
+  end
 end
